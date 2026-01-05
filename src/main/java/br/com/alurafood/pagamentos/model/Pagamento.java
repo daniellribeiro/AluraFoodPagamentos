@@ -50,6 +50,62 @@ public class Pagamento {
     @NotNull
     private Long formaDePagamentoId;
 
+    public @NotNull @Positive BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(@NotNull @Positive BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public @NotBlank @Size(max = 100) String getNome() {
+        return nome;
+    }
+
+    public void setNome(@NotBlank @Size(max = 100) String nome) {
+        this.nome = nome;
+    }
+
+    public @Size(max = 19) String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(@Size(max = 19) String numero) {
+        this.numero = numero;
+    }
+
+    public @Size(max = 7) String getExpiracao() {
+        return expiracao;
+    }
+
+    public void setExpiracao(@Size(max = 7) String expiracao) {
+        this.expiracao = expiracao;
+    }
+
+    public @Size(min = 3, max = 3) String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(@Size(min = 3, max = 3) String codigo) {
+        this.codigo = codigo;
+    }
+
+    public @NotNull Long getPedidoId() {
+        return pedidoId;
+    }
+
+    public void setPedidoId(@NotNull Long pedidoId) {
+        this.pedidoId = pedidoId;
+    }
+
+    public @NotNull Long getFormaDePagamentoId() {
+        return formaDePagamentoId;
+    }
+
+    public void setFormaDePagamentoId(@NotNull Long formaDePagamentoId) {
+        this.formaDePagamentoId = formaDePagamentoId;
+    }
+
     public Long getId() {
         return id;
     }
