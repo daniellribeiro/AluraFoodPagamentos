@@ -1,9 +1,12 @@
 package br.com.alurafood.pagamentos.dto;
+import br.com.alurafood.pagamentos.model.ItemDoPedido;
 import br.com.alurafood.pagamentos.model.Status;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +19,15 @@ public class PagamentoDTO {
     private String codigo;
     private Status status;
     private Long formaDePagamentoId;
+    private List<ItemDoPedido> itens = new ArrayList<>();
+
+    public List<ItemDoPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemDoPedido> itens) {
+        this.itens = itens;
+    }
 
     public String getNome() {
         return nome;

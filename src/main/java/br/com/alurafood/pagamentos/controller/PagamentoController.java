@@ -2,6 +2,7 @@ package br.com.alurafood.pagamentos.controller;
 
 import br.com.alurafood.pagamentos.dto.PagamentoDTO;
 import br.com.alurafood.pagamentos.service.PagamentosService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ public class PagamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<PagamentoDTO> detalhar(@PathVariable @NotNull Long id){
         PagamentoDTO dto = service.obterPorId(id);
-
+        dto.setItens(service.obterItensPedidoPorId(id));
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<PagamentoDTO> cadastrar(@RequestBody @Valid PagamentoDTO dto, UriComponentsBuilder uriBuilder){
+        public ResponseEntity<PagamentoDTO> cadastrar(@RequestBody @Valid PagamentoDTO dto, UriComponentsBuilder uriBuilder){
         PagamentoDTO pagamento = service.criarPagamento(dto);
         URI endereco = uriBuilder.path("/pagamentos/{id}").buildAndExpand(pagamento.getId()).toUri();
 
@@ -55,5 +56,15 @@ public class PagamentoController {
     public ResponseEntity<PagamentoDTO> remover(@PathVariable @NotNull Long id){
         service.excluirPagamento(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/confirmar")
+    @CircuitBreaker(name = "atualizaPedido", fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
+    public void confirmarPagamento(@PathVariable @NotNull Long id){
+        service.confirmarPagamento(id);
+    }
+
+    public void pagamentoAutorizadoComIntegracaoPendente(Long id, Exception e){
+        service.alteraStatus(id);
     }
 }
